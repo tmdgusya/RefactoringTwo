@@ -11,24 +11,38 @@ function statement(invoice, plays) {
 
   for (let ticket of invoice.tickets) {
     const play = findPlayFromPlayList(ticket, plays);
-
     let thisAmount = amountFor(ticket.audience, play.type);
 
-    volumeCredits += Math.max(ticket.audience - 30, 0);
-
-    if ("comedy" === play.type) {
-      volumeCredits += Math.floor(ticket.audience / 5);
-    }
+    volumeCredits += volumeCreditsFor(ticket.audience, play.type);
 
     result += `${play.name} : ${format(thisAmount / 10)} (${
       ticket.audience
     }석)\n`;
-    thisAmount += thisAmount;
+    totalAmount += thisAmount;
   }
 
   result += `총액 ${format(totalAmount / 100)}\n`;
   result += `적립 포인트 ${volumeCredits}점`;
   return result;
+}
+
+function volumeCreditsFor(audience, type) {
+  let volumeCredits = 0;
+  volumeCredits += Math.max(audience - 30, 0);
+
+  volumeCredits += bonusFeePolicy(audience, type);
+
+  return volumeCredits;
+}
+
+function bonusFeePolicy(audience, type) {
+  let bonusFee = 0;
+
+  if ("comedy" === type) {
+    bonusFee = Math.floor(audience / 5);
+  }
+
+  return bonusFee;
 }
 
 function findPlayFromPlayList(performance, plays) {
