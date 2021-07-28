@@ -27,3 +27,19 @@
 ## Git Commit Convention
 
 [ChapterNum] - [ExampleFileName] feature / refactor / testcode description
+
+## 공부하는 방식
+
+1. 예제코드를 먼저 이해한다.
+
+2. 머릿속에서 그린 로직의 테스트 코드를 작성한다.
+
+3. 마틴 파울러의 책을 보고 리팩토링 한다.
+
+4. 끝났다면 분리된 함수들도 테스트 코드도 리팩토링 한다.
+
+5. 나만의 리팩토링 방법으로 리팩토링 해본다.
+
+6. 테스트 코드가 잘 돌아가는지 계속해서 확인한다.
+
+7. 회고를 작성한다 chapter01_subDescription.md
