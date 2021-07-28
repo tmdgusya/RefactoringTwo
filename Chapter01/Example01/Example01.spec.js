@@ -14,10 +14,10 @@ describe("statement() result test", () => {
     const billingDetail = statement(invoiceJsonData[0], playJsonData);
 
     const expectMessage = `청구 내역 (고객명: BigCo)
-hemlet : $6,500.00 (55석)
-As You Like It : $5,800.00 (35석)
-Othello : $5,000.00 (40석)
-총액 $0.00
+hemlet : $650.00 (55석)
+As You Like It : $580.00 (35석)
+Othello : $500.00 (40석)
+총액 $17.30
 적립 포인트 47점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -27,10 +27,10 @@ Othello : $5,000.00 (40석)
     const billingDetail = statement(tragedyDefaultPriceJson[0], playJsonData);
 
     const expectMessage = `청구 내역 (고객명: Roach)
-hemlet : $4,000.00 (30석)
-As You Like It : $5,800.00 (35석)
-Othello : $4,000.00 (30석)
-총액 $0.00
+hemlet : $400.00 (30석)
+As You Like It : $580.00 (35석)
+Othello : $400.00 (30석)
+총액 $13.80
 적립 포인트 12점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -40,10 +40,10 @@ Othello : $4,000.00 (30석)
     const billingDetail = statement(comedyDefaultPriceJson[0], playJsonData);
 
     const expectMessage = `청구 내역 (고객명: BigCo)
-hemlet : $6,500.00 (55석)
-As You Like It : $3,600.00 (20석)
-Othello : $5,000.00 (40석)
-총액 $0.00
+hemlet : $650.00 (55석)
+As You Like It : $360.00 (20석)
+Othello : $500.00 (40석)
+총액 $15.10
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -53,10 +53,10 @@ Othello : $5,000.00 (40석)
     const billingDetail = statement(comedyDefaultPriceJson[0], playJsonData);
 
     const expectMessage = `청구 내역 (고객명: BigCo)
-hemlet : $6,500.00 (55석)
-As You Like It : $3,600.00 (20석)
-Othello : $5,000.00 (40석)
-총액 $0.00
+hemlet : $650.00 (55석)
+As You Like It : $360.00 (20석)
+Othello : $500.00 (40석)
+총액 $15.10
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -66,10 +66,10 @@ Othello : $5,000.00 (40석)
     const billingDetail = statement(comedyDefaultPriceJson[0], playJsonData);
 
     const expectMessage = `청구 내역 (고객명: BigCo)
-hemlet : $6,500.00 (55석)
-As You Like It : $3,600.00 (20석)
-Othello : $5,000.00 (40석)
-총액 $0.00
+hemlet : $650.00 (55석)
+As You Like It : $360.00 (20석)
+Othello : $500.00 (40석)
+총액 $15.10
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
