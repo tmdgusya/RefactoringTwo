@@ -6,9 +6,6 @@ import comedyDefaultPriceJson from "./invoices_as_like_under_30.json";
 import { expect, describe, it } from "@jest/globals";
 import statement from "./Example01";
 
-const testPlaysJsonFile = JSON.parse(JSON.stringify(playJsonData));
-const testInvoiceJsonData = JSON.parse(JSON.stringify(invoiceJsonData));
-
 describe("statement() result test", () => {
   it("USER 의 청구내역명이 RESULT 로 정상적으로 출력되는지 확인한다.", () => {
     const billingDetail = statement(invoiceJsonData[0], playJsonData);
@@ -17,7 +14,7 @@ describe("statement() result test", () => {
 hemlet : $650.00 (55석)
 As You Like It : $580.00 (35석)
 Othello : $500.00 (40석)
-총액 $17.30
+총액 $1,730.00
 적립 포인트 47점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -30,7 +27,7 @@ Othello : $500.00 (40석)
 hemlet : $400.00 (30석)
 As You Like It : $580.00 (35석)
 Othello : $400.00 (30석)
-총액 $13.80
+총액 $1,380.00
 적립 포인트 12점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -43,7 +40,7 @@ Othello : $400.00 (30석)
 hemlet : $650.00 (55석)
 As You Like It : $360.00 (20석)
 Othello : $500.00 (40석)
-총액 $15.10
+총액 $1,510.00
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -56,7 +53,7 @@ Othello : $500.00 (40석)
 hemlet : $650.00 (55석)
 As You Like It : $360.00 (20석)
 Othello : $500.00 (40석)
-총액 $15.10
+총액 $1,510.00
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
@@ -69,7 +66,7 @@ Othello : $500.00 (40석)
 hemlet : $650.00 (55석)
 As You Like It : $360.00 (20석)
 Othello : $500.00 (40석)
-총액 $15.10
+총액 $1,510.00
 적립 포인트 39점`;
 
     expect(billingDetail).toEqual(expectMessage);
