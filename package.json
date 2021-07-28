@@ -4,8 +4,9 @@
   "description": "리팩터링 2 저장소 : 이 저장소는 누구나 클론할 수 있으며, 더 좋은 공부 방법을 이슈 생성 및 Pull Request 를 통해 기여하실 수 있습니다.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
+  "module": "commonjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tmdgusya/RefactoringTwo.git"
@@ -20,6 +21,7 @@
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
     "@babel/preset-env": "^7.14.8",
+    "babel-jest": "^27.0.6",
     "jest": "^27.0.6"
   }
 }
