@@ -4,12 +4,16 @@ function statement(invoice, plays) {
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
   for (let ticket of invoice.tickets) {
-    const play = findPlayFromPlayList(ticket.playID);
-    let thisAmount = amountFor(ticket.audience, play.type);
+    let thisAmount = amountFor(ticket);
 
-    volumeCredits += volumeCreditsFor(ticket.audience, play.type);
+    volumeCredits += volumeCreditsFor(
+      ticket.audience,
+      findPlayFromPlayList(ticket.playID).type
+    );
 
-    result += `${play.name} : ${usd(thisAmount)} (${ticket.audience}석)\n`;
+    result += `${findPlayFromPlayList(ticket.playID).name} : ${usd(
+      thisAmount
+    )} (${ticket.audience}석)\n`;
     totalAmount += thisAmount;
   }
 
@@ -40,28 +44,29 @@ function statement(invoice, plays) {
     return plays[id];
   }
 
-  // 값이 바뀌지 않는 변수는 매개변수로 전달
-  function amountFor(audience, type) {
+  function amountFor(ticket) {
     let thisAmount = 0;
 
-    switch (type) {
+    switch (findPlayFromPlayList(ticket.playID).type) {
       case "tragedy":
         thisAmount = 40000;
-        if (audience > 30) {
-          thisAmount += 1000 * (audience - 30);
+        if (ticket.audience > 30) {
+          thisAmount += 1000 * (ticket.audience - 30);
         }
         break;
 
       case "comedy":
         thisAmount = 30000;
-        if (audience > 20) {
-          thisAmount += 10000 + 500 * (audience - 20);
+        if (ticket.audience > 20) {
+          thisAmount += 10000 + 500 * (ticket.audience - 20);
         }
-        thisAmount += 300 * audience;
+        thisAmount += 300 * ticket.audience;
         break;
 
       default:
-        throw new Error(`알 수 없는 장르: ${type}`);
+        throw new Error(
+          `알 수 없는 장르: ${findPlayFromPlayList(ticket.playID).type}`
+        );
     }
 
     return thisAmount;
