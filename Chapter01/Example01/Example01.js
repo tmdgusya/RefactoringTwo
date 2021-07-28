@@ -3,27 +3,27 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
-  const format = new Intl.NumberFormat("es-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format;
-
   for (let ticket of invoice.tickets) {
     const play = findPlayFromPlayList(ticket, plays);
     let thisAmount = amountFor(ticket.audience, play.type);
 
     volumeCredits += volumeCreditsFor(ticket.audience, play.type);
 
-    result += `${play.name} : ${format(thisAmount / 10)} (${
-      ticket.audience
-    }석)\n`;
+    result += `${play.name} : ${usd(thisAmount)} (${ticket.audience}석)\n`;
     totalAmount += thisAmount;
   }
 
-  result += `총액 ${format(totalAmount / 100)}\n`;
+  result += `총액 ${usd(totalAmount / 100)}\n`;
   result += `적립 포인트 ${volumeCredits}점`;
   return result;
+}
+
+function usd(money) {
+  return new Intl.NumberFormat("es-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(money / 100);
 }
 
 function volumeCreditsFor(audience, type) {
