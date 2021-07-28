@@ -10,7 +10,7 @@ function statement(invoice, plays) {
   }).format;
 
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+    const play = findPlayFromPlayList(perf, plays);
 
     let thisAmount = amountFor(perf.audience, play.type);
 
@@ -29,6 +29,10 @@ function statement(invoice, plays) {
   result += `총액 ${format(totalAmount / 100)}\n`;
   result += `적립 포인트 ${volumeCredits}점`;
   return result;
+}
+
+function findPlayFromPlayList(performance, plays) {
+  return plays[performance.playID];
 }
 
 // 값이 바뀌지 않는 변수는 매개변수로 전달
