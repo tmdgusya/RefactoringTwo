@@ -9,19 +9,19 @@ function statement(invoice, plays) {
     minimumFractionDigits: 2,
   }).format;
 
-  for (let perf of invoice.performances) {
-    const play = findPlayFromPlayList(perf, plays);
+  for (let ticket of invoice.tickets) {
+    const play = findPlayFromPlayList(ticket, plays);
 
-    let thisAmount = amountFor(perf.audience, play.type);
+    let thisAmount = amountFor(ticket.audience, play.type);
 
-    volumeCredits += Math.max(perf.audience - 30, 0);
+    volumeCredits += Math.max(ticket.audience - 30, 0);
 
     if ("comedy" === play.type) {
-      volumeCredits += Math.floor(perf.audience / 5);
+      volumeCredits += Math.floor(ticket.audience / 5);
     }
 
     result += `${play.name} : ${format(thisAmount / 10)} (${
-      perf.audience
+      ticket.audience
     }석)\n`;
     thisAmount += thisAmount;
   }

@@ -1,7 +1,7 @@
 [
   {
     "customer": "Roach",
-    "performances": [
+    "tickets": [
       {
         "playID": "hamlet",
         "audience": 30

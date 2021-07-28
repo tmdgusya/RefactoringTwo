@@ -1,7 +1,7 @@
 [
   {
     "customer": "BigCo",
-    "performances": [
+    "tickets": [
       {
         "playID": "hamlet",
         "audience": 55
