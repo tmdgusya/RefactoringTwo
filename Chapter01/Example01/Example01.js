@@ -1,5 +1,23 @@
-function statement(invoice, plays) {
+export function statement(invoice, plays) {
   return renderPlainText(createStatement(invoice, plays));
+}
+
+export function htmlStatement(invoice, plays) {
+  return renderHTML(createStatement(invoice, plays));
+}
+
+function renderHTML(data) {
+  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
+  result += "<table>\n";
+  result += "<tr><th>연극</th></th>좌석 수</th><th>금액</th><tr>";
+  for (let ticket of data.tickets) {
+    result += ` <tr><td>${ticket.play.name}</td></td>(${ticket.audience}석)</td>\n`;
+    result += `<td>${usd(ticket.amoun)}</td></tr>\n`;
+  }
+  result += `</talbe>\n`;
+  result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
+  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점`;
+  return result;
 }
 
 function createStatement(invoice, plays) {
@@ -107,5 +125,3 @@ function usd(money) {
     minimumFractionDigits: 2,
   }).format(money / 100);
 }
-
-export default statement;
