@@ -1,22 +1,14 @@
 function statement(invoice, plays) {
-  let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
   for (let ticket of invoice.tickets) {
-    let thisAmount = amountFor(ticket);
-
-    volumeCredits += volumeCreditsFor(
-      ticket.audience,
-      findPlayFromPlayList(ticket.playID).type
-    );
-
     result += `${findPlayFromPlayList(ticket.playID).name} : ${usd(
-      thisAmount
+      amountFor(ticket)
     )} (${ticket.audience}석)\n`;
   }
 
   result += `총액 ${usd(totalAmount())}\n`;
-  result += `적립 포인트 ${volumeCredits}점`;
+  result += `적립 포인트 ${totalVolumeCredits()}점`;
   return result;
 
   function totalAmount() {
@@ -27,11 +19,22 @@ function statement(invoice, plays) {
     return totalAmount;
   }
 
-  function volumeCreditsFor(audience, type) {
+  function totalVolumeCredits() {
     let volumeCredits = 0;
-    volumeCredits += Math.max(audience - 30, 0);
+    for (let ticket of invoice.tickets) {
+      volumeCredits += volumeCreditsFor(ticket);
+    }
+    return volumeCredits;
+  }
 
-    volumeCredits += bonusFeePolicy(audience, type);
+  function volumeCreditsFor(ticket) {
+    let volumeCredits = 0;
+    volumeCredits += Math.max(ticket.audience - 30, 0);
+
+    volumeCredits += bonusFeePolicy(
+      ticket.audience,
+      findPlayFromPlayList(ticket.playID).type
+    );
 
     return volumeCredits;
   }
