@@ -2,9 +2,14 @@ function statement(invoice, plays) {
   const statementData = {};
 
   statementData.customer = invoice.customer;
-  statementData.tickets = invoice.tickets;
+  statementData.tickets = invoice.tickets.map(enrichTicket);
 
   return renderPlainText(statementData, plays);
+
+  function enrichTicket(ticket) {
+    const result = Object.assign({}, ticket);
+    return result;
+  }
 }
 
 function renderPlainText(data, plays) {
