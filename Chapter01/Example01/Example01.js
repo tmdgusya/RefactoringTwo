@@ -1,11 +1,16 @@
 function statement(invoice, plays) {
-  return renderPlainText(invoice, plays);
+  const statementData = {};
+
+  statementData.customer = invoice.customer;
+  statementData.tickets = invoice.tickets;
+
+  return renderPlainText(statementData, plays);
 }
 
-function renderPlainText(invoice, plays) {
-  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
 
-  for (let ticket of invoice.tickets) {
+  for (let ticket of data.tickets) {
     result += `${findPlayFromPlayList(ticket.playID).name} : ${usd(
       amountFor(ticket)
     )} (${ticket.audience}석)\n`;
@@ -17,7 +22,7 @@ function renderPlainText(invoice, plays) {
 
   function totalAmount() {
     let totalAmount = 0;
-    for (let ticket of invoice.tickets) {
+    for (let ticket of data.tickets) {
       totalAmount += amountFor(ticket);
     }
     return totalAmount;
@@ -25,7 +30,7 @@ function renderPlainText(invoice, plays) {
 
   function totalVolumeCredits() {
     let volumeCredits = 0;
-    for (let ticket of invoice.tickets) {
+    for (let ticket of data.tickets) {
       volumeCredits += volumeCreditsFor(ticket);
     }
     return volumeCredits;
