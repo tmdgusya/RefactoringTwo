@@ -31,17 +31,24 @@ JavaScript 기반의 예제로 작성합니다.
 <br>
 <br>
 
-<div align='center'>
-    <h2>공부하는 방식</h2>
-    <ul style="list-style: none; padding: 10px"/>
-        <li>1. 예제코드를 먼저 이해한다.</li>
-        <li>2. 머릿속에서 그린 로직의 테스트 코드를 작성한다.</li>
-        <li>3. 마틴 파울러의 책을 보고 리팩토링 한다.</li>
-        <li>4. 끝났다면 분리된 함수들도 테스트 코드도 리팩토링 한다.</li>
-        <li>5. 나만의 리팩토링 방법으로 리팩토링 해본다.</li>
-        <li>6. 테스트 코드가 잘 돌아가는지 계속해서 확인한다.</li>
-        <li>7. 회고를 작성한다 chapter01_subDescription.md</li>
-    </ul>
-</div>
+## 공부하는 방식
+
+1. 예제코드를 먼저 이해한다.
+2. 머릿속에서 그린 로직의 테스트 코드를 작성한다.
+3. 마틴 파울러의 책을 보고 리팩토링 한다.
+4. 끝났다면 분리된 함수들도 테스트 코드도 리팩토링 한다.
+5. 나만의 리팩토링 방법으로 리팩토링 해본다.
+6. 테스트 코드가 잘 돌아가는지 계속해서 확인한다.
+7. 회고를 작성한다 `README.md`
 
 <br>
+
+## 예시 공부법 방법 및 회고
+
+- [코드 리팩터링 커밋](https://github.com/tmdgusya/RefactoringTwo/commits/master)
+
+- [챕터 회고](https://github.com/tmdgusya/RefactoringTwo/tree/master/Chapter01/Example01)
+
+## 저장소 이용법
+
+- 누구나 Fork 가 가능합니다. 리팩터링에 대한 좋은 의견은 Issue 로 달아주시면 감사하겠습니다.
