@@ -2,53 +2,55 @@ function statement(invoice, plays) {
   const statementData = {};
 
   statementData.customer = invoice.customer;
-  statementData.tickets = invoice.tickets.map(enrichTicket);
+  statementData.tickets = invoice.tickets.map(copyTicket);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+  statementData.totalAmount = totalAmount(statementData);
 
   return renderPlainText(statementData, plays);
 
-  function enrichTicket(ticket) {
+  function copyTicket(ticket) {
     const result = Object.assign({}, ticket);
+    result.play = findPlayFromPlayList(result.playID);
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
     return result;
   }
-}
 
-function renderPlainText(data, plays) {
-  let result = `청구 내역 (고객명: ${data.customer})\n`;
-
-  for (let ticket of data.tickets) {
-    result += `${findPlayFromPlayList(ticket.playID).name} : ${usd(
-      amountFor(ticket)
-    )} (${ticket.audience}석)\n`;
+  function findPlayFromPlayList(id) {
+    return plays[id];
   }
 
-  result += `총액 ${usd(totalAmount())}\n`;
-  result += `적립 포인트 ${totalVolumeCredits()}점`;
-  return result;
+  function amountFor(result) {
+    let thisAmount = 0;
 
-  function totalAmount() {
-    let totalAmount = 0;
-    for (let ticket of data.tickets) {
-      totalAmount += amountFor(ticket);
+    switch (result.play.type) {
+      case "tragedy":
+        thisAmount = 40000;
+        if (result.audience > 30) {
+          thisAmount += 1000 * (result.audience - 30);
+        }
+        break;
+
+      case "comedy":
+        thisAmount = 30000;
+        if (result.audience > 20) {
+          thisAmount += 10000 + 500 * (result.audience - 20);
+        }
+        thisAmount += 300 * result.audience;
+        break;
+
+      default:
+        throw new Error(`알 수 없는 장르: ${result.play.type}`);
     }
-    return totalAmount;
+
+    return thisAmount;
   }
 
-  function totalVolumeCredits() {
+  function volumeCreditsFor(result) {
     let volumeCredits = 0;
-    for (let ticket of data.tickets) {
-      volumeCredits += volumeCreditsFor(ticket);
-    }
-    return volumeCredits;
-  }
+    volumeCredits += Math.max(result.audience - 30, 0);
 
-  function volumeCreditsFor(ticket) {
-    let volumeCredits = 0;
-    volumeCredits += Math.max(ticket.audience - 30, 0);
-
-    volumeCredits += bonusFeePolicy(
-      ticket.audience,
-      findPlayFromPlayList(ticket.playID).type
-    );
+    volumeCredits += bonusFeePolicy(result.audience, result.play.type);
 
     return volumeCredits;
   }
@@ -63,37 +65,35 @@ function renderPlainText(data, plays) {
     return bonusFee;
   }
 
-  function findPlayFromPlayList(id) {
-    return plays[id];
-  }
-
-  function amountFor(ticket) {
-    let thisAmount = 0;
-
-    switch (findPlayFromPlayList(ticket.playID).type) {
-      case "tragedy":
-        thisAmount = 40000;
-        if (ticket.audience > 30) {
-          thisAmount += 1000 * (ticket.audience - 30);
-        }
-        break;
-
-      case "comedy":
-        thisAmount = 30000;
-        if (ticket.audience > 20) {
-          thisAmount += 10000 + 500 * (ticket.audience - 20);
-        }
-        thisAmount += 300 * ticket.audience;
-        break;
-
-      default:
-        throw new Error(
-          `알 수 없는 장르: ${findPlayFromPlayList(ticket.playID).type}`
-        );
+  function totalVolumeCredits(statementData) {
+    let volumeCredits = 0;
+    for (let ticket of statementData.tickets) {
+      volumeCredits += volumeCreditsFor(ticket);
     }
-
-    return thisAmount;
+    return volumeCredits;
   }
+
+  function totalAmount(statementData) {
+    let totalAmount = 0;
+    for (let ticket of statementData.tickets) {
+      totalAmount += ticket.amount;
+    }
+    return totalAmount;
+  }
+}
+
+function renderPlainText(data) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+
+  for (let ticket of data.tickets) {
+    result += `${ticket.play.name} : ${usd(ticket.amount)} (${
+      ticket.audience
+    }석)\n`;
+  }
+
+  result += `총액 ${usd(data.totalAmount)}\n`;
+  result += `적립 포인트 ${data.totalVolumeCredits}점`;
+  return result;
 }
 
 function usd(money) {
