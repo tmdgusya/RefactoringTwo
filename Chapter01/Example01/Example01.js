@@ -1,23 +1,12 @@
+import { usd } from "./dollorUtil";
+import { createTicketCalculater } from "./TicketCalculator";
+
 export function statement(invoice, plays) {
   return renderPlainText(createStatement(invoice, plays));
 }
 
 export function htmlStatement(invoice, plays) {
   return renderHTML(createStatement(invoice, plays));
-}
-
-function renderHTML(data) {
-  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
-  result += "<table>\n";
-  result += "<tr><th>연극</th></th>좌석 수</th><th>금액</th><tr>";
-  for (let ticket of data.tickets) {
-    result += ` <tr><td>${ticket.play.name}</td></td>(${ticket.audience}석)</td>\n`;
-    result += `<td>${usd(ticket.amount)}</td></tr>\n`;
-  }
-  result += `</talbe>\n`;
-  result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
-  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점`;
-  return result;
 }
 
 function createStatement(invoice, plays) {
@@ -31,9 +20,13 @@ function createStatement(invoice, plays) {
   return statementData;
 
   function copyTicket(ticket) {
+    const caculator = createTicketCalculater(
+      ticket,
+      findPlayFromPlayList(ticket.playID)
+    );
     const result = Object.assign({}, ticket);
-    result.play = findPlayFromPlayList(result.playID);
-    result.amount = amountFor(result);
+    result.play = caculator.play;
+    result.amount = amountFor(ticket);
     result.volumeCredits = volumeCreditsFor(result);
     return result;
   }
@@ -42,49 +35,14 @@ function createStatement(invoice, plays) {
     return plays[id];
   }
 
-  function amountFor(result) {
-    let thisAmount = 0;
-
-    switch (result.play.type) {
-      case "tragedy":
-        thisAmount = 40000;
-        if (result.audience > 30) {
-          thisAmount += 1000 * (result.audience - 30);
-        }
-        break;
-
-      case "comedy":
-        thisAmount = 30000;
-        if (result.audience > 20) {
-          thisAmount += 10000 + 500 * (result.audience - 20);
-        }
-        thisAmount += 300 * result.audience;
-        break;
-
-      default:
-        throw new Error(`알 수 없는 장르: ${result.play.type}`);
-    }
-
-    return thisAmount;
+  function amountFor(ticket) {
+    return createTicketCalculater(ticket, findPlayFromPlayList(ticket.playID))
+      .amount;
   }
 
-  function volumeCreditsFor(result) {
-    let volumeCredits = 0;
-    volumeCredits += Math.max(result.audience - 30, 0);
-
-    volumeCredits += bonusFeePolicy(result.audience, result.play.type);
-
-    return volumeCredits;
-  }
-
-  function bonusFeePolicy(audience, type) {
-    let bonusFee = 0;
-
-    if ("comedy" === type) {
-      bonusFee = Math.floor(audience / 5);
-    }
-
-    return bonusFee;
+  function volumeCreditsFor(ticket) {
+    return createTicketCalculater(ticket, findPlayFromPlayList(ticket.playID))
+      .volumeCredits;
   }
 
   function totalVolumeCredits(statementData) {
@@ -118,10 +76,16 @@ function renderPlainText(data) {
   return result;
 }
 
-function usd(money) {
-  return new Intl.NumberFormat("es-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(money / 100);
+function renderHTML(data) {
+  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
+  result += "<table>\n";
+  result += "<tr><th>연극</th></th>좌석 수</th><th>금액</th><tr>";
+  for (let ticket of data.tickets) {
+    result += ` <tr><td>${ticket.play.name}</td></td>(${ticket.audience}석)</td>\n`;
+    result += `<td>${usd(ticket.amount)}</td></tr>\n`;
+  }
+  result += `</talbe>\n`;
+  result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
+  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점`;
+  return result;
 }
