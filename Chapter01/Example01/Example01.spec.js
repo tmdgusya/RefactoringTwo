@@ -4,7 +4,7 @@ import flaseJsonData from "./falsePlay.json";
 import tragedyDefaultPriceJson from "./invoices_as_tragedy_30.json";
 import comedyDefaultPriceJson from "./invoices_as_like_under_30.json";
 import { expect, describe, it } from "@jest/globals";
-import statement from "./Example01";
+import { statement, htmlStatement } from "./Example01";
 
 describe("statement() result test", () => {
   it("USER 의 청구내역명이 RESULT 로 정상적으로 출력되는지 확인한다.", () => {
@@ -78,3 +78,54 @@ Othello : $500.00 (40석)
     }).toThrowError(new Error("알 수 없는 장르: movie"));
   });
 });
+
+describe("HTMLstate() result test", () => {
+  it("USER 의 청구내역명이 RESULT 로 정상적으로 출력되는지 확인한다.", () => {
+    const billingDetail = htmlStatement(invoiceJsonData[0], playJsonData);
+    const testdata = {
+      customer: "BigCo",
+      tickets: [
+        {
+          playID: "hamlet",
+          audience: 55,
+          play: { name: "hemlet", type: "tragedy" },
+          amount: "$650.00",
+          volumeCredits: 25,
+        },
+        {
+          playID: "as-like",
+          audience: 35,
+          play: { name: "As You Like It", type: "comedy" },
+          amount: "$580.00",
+          volumeCredits: 12,
+        },
+        {
+          playID: "othello",
+          audience: 40,
+          play: { name: "Othello", type: "tragedy" },
+          amount: "$500.00",
+          volumeCredits: 10,
+        },
+      ],
+      totalVolumeCredits: 47,
+      totalAmount: "$1,730.00",
+    };
+    const expectMessage = createTestMessage(testdata);
+
+    expect(billingDetail).toEqual(expectMessage);
+  });
+});
+
+function createTestMessage(data) {
+  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
+  result += "<table>\n";
+  result += "<tr><th>연극</th></th>좌석 수</th><th>금액</th><tr>";
+  for (let ticket of data.tickets) {
+    result += ` <tr><td>${ticket.play.name}</td></td>(${ticket.audience}석)</td>\n`;
+    result += `<td>${ticket.amount}</td></tr>\n`;
+  }
+  result += `</talbe>\n`;
+  result += `<p>총액: <em>${data.totalAmount}</em></p>\n`;
+  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점`;
+  return result;
+}

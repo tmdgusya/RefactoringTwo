@@ -12,7 +12,7 @@ function renderHTML(data) {
   result += "<tr><th>연극</th></th>좌석 수</th><th>금액</th><tr>";
   for (let ticket of data.tickets) {
     result += ` <tr><td>${ticket.play.name}</td></td>(${ticket.audience}석)</td>\n`;
-    result += `<td>${usd(ticket.amoun)}</td></tr>\n`;
+    result += `<td>${usd(ticket.amount)}</td></tr>\n`;
   }
   result += `</talbe>\n`;
   result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
